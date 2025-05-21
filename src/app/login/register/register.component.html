@@ -1,0 +1,18 @@
+<div class="contenedor">
+    <form [formGroup]="formulario" class="formulario" (ngSubmit)="onSubmit()">
+        <h1>Registro</h1>
+
+        <input type="text" placeholder="Nombre" class="nombre" formControlName="nombre">
+
+        <input type="email" placeholder="Correo" class="correo" formControlName="correo">
+
+        <input type="password" placeholder="Contraseña" class="contrasena" formControlName="contrasena">
+
+        <input type="password" placeholder="Confirmar Contraseña" class="confirmarContrasena" formControlName="confirmarContrasena"> 
+
+        <button type="submit"  class="guardar" >Guardar</button>
+
+        <button type="submit"  class="guardar"(click)="login()">Login</button>
+
+    </form>
+</div>

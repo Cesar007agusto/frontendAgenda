@@ -1,0 +1,105 @@
+<div class="contenedorDash">
+  <header class="itemHeader">
+    
+    <div><h1>Programa Tu Agenda</h1></div>
+
+    
+
+    <div>
+      <button class="btn boton"  (click)="openModalCreate()">
+        Nueva Tarea
+      </button>
+    </div>
+
+    <div>
+      <button class="btn boton" (click)="openModalUpload()">
+        Cargar.xlsx
+      </button>
+    </div>
+
+    <div>
+      <button class="btn boton" (click)="descargarXlsx()">
+        Descargar.xlsx
+      </button>
+    </div>
+
+    <div>
+      <a (click)="mostrarNotificaciones(); openModalNotifications()"
+        ><mat-icon class="bell">notifications</mat-icon></a
+      >
+    </div>
+  </header>
+
+  <table class="table table-hover itemtabla">
+    <thead>
+      <tr>
+        <th scope="col">TAREAS</th>
+        <th scope="col">FECHA</th>
+        <th scope="col">ESTADO</th>
+        <th scope="col">EDITAR</th>
+        <th scope="col">BORRAR</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let registro of datos">
+        <td>{{ registro.nombre }}</td>
+        <td>{{ registro.fecha }}</td>
+        <td>
+          {{
+            registro?.estado == 1
+              ? "PENDIENTE"
+              : registro?.estado == 2
+              ? "EN PROCESO"
+              : registro?.estado == 3
+              ? "TERMINADO"
+              : "SIN ESTADO"
+          }}
+        </td>
+        <td>
+          <a (click)="abrirModalEditar(); enviarCodTarea(registro, $event)"
+            ><mat-icon class="botonEditar">edit</mat-icon></a
+          >
+        </td>
+        <td>
+          <!-- Se comentó routerLink para pruebas [routerLink]="['/delete', registro.nombre]" -->
+          <a
+            (click)="
+              openModalDelete(registro); enviarCodTarea(registro, $event)
+            "
+            ><mat-icon class="botonEliminar">delete</mat-icon></a
+          >
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <footer class="itemFooter">
+    <div class="contenedorMedia">
+      <div>
+        <a
+          href="https://github.com/Cesar007agusto"
+          target="_blank"
+          style="text-decoration: none"
+        >
+          <i class="bi bi-github fs-3"></i>
+        </a>
+      </div>
+
+      <div>
+        <a
+          href="https://www.linkedin.com/in/cesar-chavez-vargas-854440173/"
+          target="_blank"
+          style="text-decoration: none"
+        >
+          <i class="bi bi-linkedin fs-3"></i>
+        </a>
+      </div>
+    </div>
+
+    <div class="contenedorCesar">
+      <h3>By César Augusto Chavez Vargas</h3>
+    </div>
+
+    <div><h4>2025</h4></div>
+  </footer>
+</div>

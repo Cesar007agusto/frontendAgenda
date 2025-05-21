@@ -1,0 +1,39 @@
+<div class="contendedorModal">
+  <div>
+    <h2 class="titulo">NUEVA TAREA</h2>
+  </div>
+
+  <mat-dialog-content class="contenedorInput">
+    <div>
+      <input
+        type="text"
+        id="typeEmailX"
+        class="input"
+        placeholder="Nombre Tarea"
+        [(ngModel)]="datos.nombre"
+        [(ngModel)]="this.nombre"
+      />
+    </div>
+
+    <div>
+      <input
+        type="date"
+        id="typePasswordX"
+        class="input"
+        placeholder="Fecha"
+        [(ngModel)]="datos.fecha"
+        [(ngModel)]="this.fecha"
+      />
+    </div>
+  </mat-dialog-content>
+
+  <mat-dialog-actions class="contenedorBotones">
+    <div>
+      <button class="botonGuardar" (click)="createTaskAndClose()">Crear</button>
+    </div>
+
+    <div>
+      <button class="botonCerrar" (click)="cerrarModalCreate()">Cerrar</button>
+    </div>
+  </mat-dialog-actions>
+</div>

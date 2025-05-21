@@ -1,0 +1,39 @@
+.contenedorModal{
+    display: flex;
+    flex-direction: column;
+    background: linear-gradient(to right, rgb(0, 0, 0), rgb(0, 128, 255));
+    
+}
+
+.contenedorBotones{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    padding: 15px;
+
+}
+
+.parrafo{
+    color: aliceblue;
+    font-size: 20px;
+    padding: 15px;
+}
+
+.botonEliminar {
+    width: 100px;
+    height: 35px;
+    background-color: rgb(51, 255, 0);
+    color: aliceblue;
+    border-radius: 15px;
+  
+  }
+  
+  .botonRegresar {
+    width: 100px;
+    height: 35px;
+    background-color: rgb(255, 17, 0);
+    color: aliceblue;
+    border-radius: 15px;
+  
+  }
+

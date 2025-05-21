@@ -1,0 +1,44 @@
+<div class="contendedorModal">
+
+  <div>
+    <h2 class="titulo">EDITAR TAREA</h2>
+  </div>
+
+  
+  
+  <mat-dialog-content class="contenedorInput">
+
+    <div>
+      <input class="input" type="text" [value]="this.camposTabla.nombre" (input)="getNombreFromInput($event)"/>
+    </div>
+
+    <div>
+      <input class="input" type="date" [value]="this.fechaFormateada" (input)="getFechaFromInput($event)"/>
+    </div>
+
+    <div>
+      <select class="input" id="opciones" name="opciones" [value]="this.camposTabla.estado" (input)="getEstadoFromInput($event)">
+        <option value="0">Sin Estado</option>
+        <option value="1">Pendiente</option>
+        <option value="2">En Proceso</option>
+        <option value="3">Terminado</option>
+      </select>
+    </div>
+  </mat-dialog-content>
+
+
+  <mat-dialog-actions class="contenedorBotones">
+
+    <div >
+      <button class="botonGuardar" (click)="sendRequestAndClose();">Guardar</button>
+    </div>
+
+    <div >
+      <button class="botonCerrar" mat-button (click)="cerrarModal()">
+        Cerrar
+      </button>
+    </div>
+    
+  </mat-dialog-actions>
+
+</div>

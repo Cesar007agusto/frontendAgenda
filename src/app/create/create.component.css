@@ -1,0 +1,56 @@
+.contendedorModal {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  background: linear-gradient(to right, rgb(0, 0, 0), rgb(0, 128, 255));
+}
+
+.contenedorInput {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+
+}
+
+.contenedorBotones {
+  display: flex;
+  flex-direction: row;
+  gap: 25px;
+  padding: 7%;
+}
+
+.titulo {
+  padding: 10px;
+  color: aliceblue;
+}
+
+.input {
+  border-radius: 15px;
+  width: 280px;
+  /* ancho */
+  height: 37px;
+  /* alto */
+  font-size: 15px;
+  /* tamaño del texto */
+  padding: 10px;
+  /* espacio interno */
+}
+
+.botonGuardar {
+  width: 100px;
+  height: 35px;
+  background-color: rgb(51, 255, 0);
+  color: aliceblue;
+  border-radius: 15px;
+
+}
+
+.botonCerrar {
+  width: 100px;
+  height: 35px;
+  background-color: rgb(255, 17, 0);
+  color: aliceblue;
+  border-radius: 15px;
+
+}

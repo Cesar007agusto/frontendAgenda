@@ -1,0 +1,25 @@
+<div class="contenedorMain">
+  
+  <div class="contendedorTitulo">
+    <h2 >Tareas para hoy</h2>
+  </div>
+
+  <div class="contendedorNotifications">
+
+    <div  *ngIf="this.mostrar; else withoutNotifications">
+      <ul *ngFor="let notif of notificaciones">
+        <li >
+          {{ notif.nombre }} - {{ notif.fecha | date : "dd/MM/yyyy" }}
+        </li>
+      </ul>
+  
+    </div>
+
+    <ng-template #withoutNotifications>
+      <h3>¡No Tienes tareas para hoy!
+      </h3>
+    </ng-template>
+
+  </div>
+
+</div>

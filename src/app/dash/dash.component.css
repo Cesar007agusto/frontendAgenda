@@ -1,0 +1,145 @@
+
+::ng-deep .toast-success {
+  background-color: rgb(44, 215, 1);
+  color: #f1faee;
+  font-weight: bold;
+  border-radius: 10px;
+}
+
+.contenedorDash{
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  
+  
+}
+
+.itemHeader{
+  display: flex;
+  flex-direction: row;
+  justify-content:space-around;
+  flex-wrap: wrap;
+  align-items: center;
+  padding-top: 1%;
+  padding-bottom: 2%;
+  
+  background: linear-gradient(to right, rgb(0, 0, 0), rgb(0, 128, 255));
+  color: aliceblue;
+  flex: 0;
+
+  
+}
+
+
+
+.itemtabla{
+  
+  margin-bottom: 0; /* Elimina cualquier margen inferior */
+  font-size: 15px;
+  
+  
+
+}
+
+
+
+th,td{
+  background-color: rgb(9, 60, 170);
+  color: aliceblue;
+}
+
+
+.itemFooter{
+  display: flex;
+  flex-direction:column;
+  align-items: center;
+  color: aliceblue;
+  background: linear-gradient(to right, rgb(0, 0, 0), rgb(0, 128, 255));
+  flex: 3;
+}
+
+.contenedorMedia{
+  display: flex;
+  flex-direction:row;
+  width: 200px;
+  height: 70px;
+  align-items: center;
+  justify-content:space-around;
+}
+
+.contenedorCesar{
+  display: flex;
+  flex-direction:row;
+  height: 30px;
+}
+
+.bell{
+  color: rgb(51, 255, 0);
+  cursor: pointer;
+}
+
+.bell:hover{
+  
+  color: rgb(245, 241, 9);
+}
+
+.boton{
+  background-color: rgb(48, 241, 0);
+  color: rgb(255, 255, 255);
+  
+}
+
+.boton:hover{
+  background-color: rgb(51, 255, 0);
+  
+}
+
+.botonEditar{
+  color: rgb(51, 255, 0);
+}
+.botonEditar:hover{
+  color: rgb(245, 241, 9);
+}
+
+
+.botonEliminar{
+  color: rgb(255, 17, 0);
+}
+.botonEliminar:hover{
+  color: rgb(245, 241, 9);
+}
+
+
+
+@media (max-width: 558px) {
+  .itemHeader{
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    padding-top: 5%;
+    padding-bottom: 5%;
+
+    background: linear-gradient(to right, rgb(0, 0, 0), rgb(0, 128, 255));
+    color: aliceblue;
+    
+  }
+
+  .boton{
+    background-color: rgb(48, 241, 0);
+    color: rgb(255, 255, 255);
+    width: 350px;
+  }
+  .boton:hover{
+    background-color: rgb(51, 255, 0);
+    
+  }
+
+  
+}
+
+
+
+
+
+
+  
