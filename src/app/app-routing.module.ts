@@ -7,6 +7,7 @@ import { CreateComponent } from './create/create.component';
 
 import { DeleteComponent } from './delete/delete.component';
 import { RegisterComponent } from './login/register/register.component';
+import {loginGuard} from '../app/guards/login.guard';
 
 const appRoutes:Routes=[
 
@@ -15,9 +16,9 @@ const appRoutes:Routes=[
     loadChildren: () =>
       import('./login/login.module').then(m => m.LoginModule)
   },
-  {path:'dash',component:DashComponent},
-  {path:'add',component:CreateComponent},
-  {path:'delete/:nombre',component:DeleteComponent},
+  {path:'dash',component:DashComponent,canActivate:[loginGuard]},
+  //{path:'add',component:CreateComponent},
+  //{path:'delete/:nombre',component:DeleteComponent},
   {path:'register',component:RegisterComponent}
 
   

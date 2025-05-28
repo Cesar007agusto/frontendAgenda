@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-
+import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { ModalEditarComponent } from '../modal-editar/modal-editar.component';
 import { ModalNotificationsComponent } from '../modal-notifications/modal-notifications.component';
@@ -30,7 +30,8 @@ export class DashComponent implements OnInit {
     private dialog: MatDialog,
     private traerDatos: BringDataFromBackService,
     private codTarea: ShareDataService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private router: Router,
   ) {
     this.suscripcion = this.tmp;
   }
@@ -67,6 +68,11 @@ export class DashComponent implements OnInit {
       }
     );
 
+  }
+
+  closeSession(){
+    localStorage.removeItem('tokenJwt');
+    this.router.navigate(['/']);
   }
 
 

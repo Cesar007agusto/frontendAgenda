@@ -4,7 +4,8 @@ import { Observable } from 'rxjs';
 import { Tarea } from '../model/tareas';
 import { User } from '../model/user';
 import axios from 'axios';
-import { RegisterResponse } from '../model/registerInterface';
+import { RegisterResponse } from '../model/register';
+
 
 
 
