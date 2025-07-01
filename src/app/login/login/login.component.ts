@@ -18,7 +18,7 @@ export class LoginComponent {
   constructor(
     private router: Router,
     private httpClient: BringDataFromBackService,
-    private toast:ToastrService
+    private toast: ToastrService
   ) {
     this.datosUser = { nombre: "", correo: "", contrasena: "" };
   }
@@ -37,24 +37,16 @@ export class LoginComponent {
       this.httpClient.login(this.datosUser).subscribe(
         {
           next: (response) => {
-            if(response.token){
-              const jwt:string=response.token;
-              console.log("tokencillo ",jwt);
-              localStorage.setItem('tokenJwt',jwt);
-              this.router.navigate(['/dash']);
-              
-            }else if(response.mensaje){
-              console.log("Usuario o contraseña incorrectos",response);
-              this.toast.error('Credenciales no validas');
 
-            }
-          //console.log("response completo: ", JSON.stringify(response, null, 2));
-
+            const jwt: string = response.token;
             
+            localStorage.setItem('tokenJwt', jwt);
+            this.router.navigate(['/dash']);
 
           },
           error: (error) => {
-            console.log("error en la peticion login", error);
+            console.error("error en la peticion login", error);
+            this.toast.error('Credenciales no validas');
           },
           complete: () => {
             console.log("peticion LoginComplete");
@@ -63,7 +55,7 @@ export class LoginComponent {
           }
         }
       );
-    }else{
+    } else {
       this.toast.error('Ingrese las credenciales de usuario')
     }
 

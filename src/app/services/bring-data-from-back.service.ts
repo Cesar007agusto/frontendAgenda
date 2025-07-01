@@ -1,3 +1,4 @@
+import { AuthService } from './headers-token.service';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -5,7 +6,6 @@ import { Tarea } from '../model/tareas';
 import { User } from '../model/user';
 import axios from 'axios';
 import { RegisterResponse } from '../model/register';
-
 
 
 
@@ -31,17 +31,24 @@ export class BringDataFromBackService {
 
 
 
-  constructor(private http: HttpClient) { }
+  constructor(
+    private http: HttpClient,
+    private authService:AuthService
+  )
+    { }
 
   //Tareas
   //Obtener lista de tareas
   getTask(): Observable<any> {
-    return this.http.get<any>(this.apiUrlRead);
+    const headers = this.authService.getAuthHeaders();
+    return this.http.get<any>(this.apiUrlRead,{headers});
   }
 
   // Método para enviar los datos del formulario
   createTask(objTarea: Tarea): Observable<any> {
-    return this.http.post<any>(this.apiUrlCreate, objTarea);
+    const headers = this.authService.getAuthHeaders();
+    return this.http.post<any>(this.apiUrlCreate, objTarea,{headers});
+  
   }
 
   //Delete Task
@@ -51,8 +58,13 @@ export class BringDataFromBackService {
 
   //notificaciones
   async showNotifications() {
+  const token = localStorage.getItem('tokenJwt');
     try {
-      const notificaciones = await axios.get('http://localhost:3000/tareas/notificaciones');
+      const notificaciones = await axios.get('http://localhost:3000/tareas/notificaciones',{
+        headers: {
+        Authorization: `Bearer ${token}`,
+      }
+      });
       console.log("datos ", notificaciones.data);
       return notificaciones.data;
 
