@@ -12,6 +12,8 @@ import { DeleteComponent } from '../delete/delete.component';
 import { UploadXlsxComponent } from '../upload-xlsx/upload-xlsx.component'
 
 import { saveAs } from 'file-saver';
+import { jwtDecode } from 'jwt-decode';
+import { Tokenpayload } from '../model/token';
 
 @Component({
   selector: 'app-dash',
@@ -23,6 +25,7 @@ export class DashComponent implements OnInit {
   private suscripcion: Subscription;
   private tmp: any;
   public datos: any[] = [];
+  protected nombre:string;
 
 
 
@@ -34,10 +37,12 @@ export class DashComponent implements OnInit {
     private router: Router,
   ) {
     this.suscripcion = this.tmp;
+    this.nombre='';
   }
 
   ngOnInit() {
     this.obtenerDatos();
+    this.nombre=this.mostrarNombreUser();
   }
 
   obtenerDatos(): void {
@@ -70,7 +75,7 @@ export class DashComponent implements OnInit {
 
   }
 
-  closeSession(){
+  closeSession() {
     localStorage.removeItem('tokenJwt');
     this.router.navigate(['/']);
   }
@@ -178,18 +183,38 @@ export class DashComponent implements OnInit {
       width: '350px'
     });
 
-    dialogo.afterClosed().subscribe(result=>{
-      console.log("afterclose ",result)
-      if(result===1){
+    dialogo.afterClosed().subscribe(result => {
+      console.log("afterclose ", result)
+      if (result === 1) {
         this.toastr.success('Arhivo cargado y leido');
         this.obtenerDatos();
-      }else if(result===0){
+      } else if (result === 0) {
         this.toastr.error('Error al cargar el archivo');
       }
-      
-      
+
+
 
     });
+
+  }
+
+  mostrarNombreUser() {
+    const token = localStorage.getItem('tokenJwt');
+    if (!token) {
+      console.log("token no disponible");
+    }
+    try {
+
+      const payload: Tokenpayload = jwtDecode(token as string);
+      return payload.nombre;
+
+    } catch (error) {
+
+      console.error('Token inválido:', error);
+      return "";
+
+    }
+
 
   }
 
