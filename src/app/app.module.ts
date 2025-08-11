@@ -1,9 +1,10 @@
+import { AuthInterceptor } from './services/auth.interceptor';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppComponent } from './app.component';
 
 import { AppRoutingModule } from './app-routing.module';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 
 import { DashComponent } from './dash/dash.component';
 import { CreateComponent } from './create/create.component';
@@ -42,13 +43,17 @@ import { UploadXlsxComponent } from './upload-xlsx/upload-xlsx.component';
     MatDialogModule,
     ToastrModule.forRoot({
       positionClass: 'toast-top-right', // puedes cambiarlo a top-right, top-center, etc.
-      timeOut: 3000, // duración en ms
+      timeOut: 1000, // duración en ms
       preventDuplicates: true,
       progressBar: true
     })
   ],
 
-  providers: [],
+  providers: [{
+    provide:HTTP_INTERCEPTORS,
+    useClass:AuthInterceptor,
+    multi:true
+  }],
 
   bootstrap: [AppComponent]
 })

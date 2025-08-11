@@ -1,6 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { ShareDataService } from '../services/shareData.service';
+import { Tarea } from '../model/tareas';
+import { BringDataFromBackService } from '../services/bring-data-from-back.service';
 
 
 
@@ -10,19 +12,22 @@ import { ShareDataService } from '../services/shareData.service';
   styleUrls: ['./modal-editar.component.css']
 })
 export class ModalEditarComponent implements OnInit, OnDestroy {
-
+  //frontend
   public nombre: string = "";
   public fecha: string = "";
   public estado: string = "";
-  public camposTabla: any = {};
+
+  //backend
+  public camposTabla: Tarea = { codTarea: 0, codUsuario: 0, nombre: '', fecha: '', estado: '' };
 
   public fechaFormateada: any;
-  public respuestaServidor:any={};
+  public respuestaServidor: any = {};
 
 
   constructor(
     private dialogRef: MatDialogRef<ModalEditarComponent>,
-    private getCodTarea: ShareDataService
+    private getCodTarea: ShareDataService,
+    private editHttpClient: BringDataFromBackService
   ) { }
 
   protected getNombreFromInput(event: Event) {
@@ -44,19 +49,19 @@ export class ModalEditarComponent implements OnInit, OnDestroy {
   }
 
   //llamado desde boton guardar html
-  async sendRequestAndClose(){
-    if(this.nombre !== this.camposTabla.nombre 
-      || this.fecha !== this.camposTabla.fecha 
-      || this.estado !==this.camposTabla.estado){
+  async sendRequestAndClose() {
+    if (this.nombre !== this.camposTabla.nombre
+      || this.fecha !== this.camposTabla.fecha
+      || this.estado !== this.camposTabla.estado) {
 
       await this.editarTarea();
+    }else{
+      this.cerrarModal();
     }
-    
-    this.cerrarModal();
-    
+
   }
 
- 
+
 
   convertirFecha(fecha: string): string {
     const parte = fecha.split('/'); // Divide "08/01/2025" en ["08", "01", "2025"]
@@ -68,9 +73,9 @@ export class ModalEditarComponent implements OnInit, OnDestroy {
     this.getCodTarea.currentData.subscribe(data => {
       this.camposTabla = data;
 
-      this.nombre= this.camposTabla.nombre;
-      this.fecha= this.camposTabla.fecha;
-      this.estado= this.camposTabla.estado;
+      this.nombre = this.camposTabla.nombre;
+      this.fecha = this.camposTabla.fecha;
+      this.estado = this.camposTabla.estado;
 
       console.log("getCodTarea: ", this.camposTabla.codTarea);
     });
@@ -80,45 +85,41 @@ export class ModalEditarComponent implements OnInit, OnDestroy {
 
   }
 
-
   ngOnDestroy(): void {
 
   }
 
   private async editarTarea() {
-  
-    try {
-      const response = await fetch('http://localhost:3000/tareas/update', {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          //parametros para el put
-          nombre: this.nombre,
-          fecha: this.fecha,
-          estado: this.estado,
-          codTarea:this.camposTabla.codTarea
-          
-        })
-      });
-
-      const data = await response.json();
-
-      console.log('editar tarea Respuesta del servi:', data);
-      this.respuestaServidor=data;
-
-
-    } catch (error) {
-      console.error('Error en la peticion PUT:', error);
+    const objTarea: Tarea = {
+      codTarea: this.camposTabla.codTarea,
+      codUsuario: 0,
+      nombre: this.nombre,
+      fecha: this.fecha,
+      estado: this.estado
     }
+    this.editHttpClient.editTask(objTarea).subscribe(
+      {
+        next: (data) => {
+          console.log("Respuesta backend ", data.respuesta);
+          this.respuestaServidor =data.respuesta;
+        },
+        error: (err) => {
+          console.error("error al editar tarea ", err);
+          this.respuestaServidor =err;
+        },
+        complete: () => {
+          console.log("suscribe completado");
+          this.cerrarModal();
+        }
+
+      });
   }
 
   //llamado desde botones html
   cerrarModal() {
     //enviar valor de retorno al componente que lo abrio -->dash
-    console.log("cerrando modal -> respuesta del Back",this.respuestaServidor.respuesta);
-    this.dialogRef.close(this.respuestaServidor.respuesta);
+    console.log("cerrando modal -> respuesta del Back", this.respuestaServidor);
+    this.dialogRef.close(this.respuestaServidor);
   }
 
 }

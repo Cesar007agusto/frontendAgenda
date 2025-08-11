@@ -1,26 +1,19 @@
 <div class="contenedorDash">
-  <header class="itemHeader">
-    
-    <div><h1>¡Que Alegria Tenerte {{this.nombre}}!</h1></div>
-
-    
-
+  <header class="itemHeader" *ngIf="this.isPc; else headerMovil">
     <div>
-      <button class="btn boton"  (click)="openModalCreate()">
-        Nueva Tarea
-      </button>
+      <h1>¡{{ this.saludo }}, {{ this.nombre }}!</h1>
     </div>
 
     <div>
-      <button class="btn boton" (click)="openModalUpload()">
-        Cargar.xlsx
-      </button>
+      <button class="btn boton" (click)="openModalCreate()">Nueva Tarea</button>
     </div>
 
     <div>
-      <button class="btn boton" (click)="descargarXlsx()">
-        Descargar.xlsx
-      </button>
+      <button class="btn boton" (click)="openModalUpload()">Cargar.xlsx</button>
+    </div>
+
+    <div>
+      <button class="btn boton" (click)="descargarXlsx()">Descargar.xlsx</button>
     </div>
 
     <div>
@@ -33,6 +26,30 @@
       <button class="btn boton" (click)="closeSession()">Cerrar Session</button>
     </div>
   </header>
+
+  <ng-template #headerMovil>
+    <header class="itemHeader">
+      
+        <h1>¡{{ this.saludo }}, {{ this.nombre }}!</h1>
+        <!-- Icono hamburguesa -->
+      <span class="hamburger" (click)="abrirMenu()">☰</span>
+    
+      <!-- Menú desplegable -->
+      <div class="menu" [class.open]="menuAbierto">
+
+        <div class="close-btn" (click)="cerrarMenu()">✖</div>
+        <ul  class="lista">
+          <li><a (click)="mostrarNotificaciones(); openModalNotifications()"><mat-icon class="bell">
+          notifications</mat-icon></a> </li>
+          <li><button class="btn boton" (click)="openModalCreate()">Nueva Tarea</button></li>
+          <li><button class="btn boton" (click)="openModalUpload()">Cargar.xlsx</button></li>
+          <li><button class="btn boton" (click)="descargarXlsx()">Descargar.xlsx</button></li>
+          <li><button class="btn boton" (click)="closeSession()">Cerrar Session</button></li>
+        </ul>
+      </div>
+
+    </header>
+  </ng-template>
 
   <table class="table table-hover itemtabla">
     <thead>

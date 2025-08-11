@@ -1,19 +1,17 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { ModalEditarComponent } from '../modal-editar/modal-editar.component';
 import { ModalNotificationsComponent } from '../modal-notifications/modal-notifications.component';
-import { Subscription } from 'rxjs';
 import { BringDataFromBackService } from '../services/bring-data-from-back.service';
 import { ShareDataService } from '../services/shareData.service';
 import { ToastrService } from 'ngx-toastr';
 import { CreateComponent } from '../create/create.component';
 import { DeleteComponent } from '../delete/delete.component';
-import { UploadXlsxComponent } from '../upload-xlsx/upload-xlsx.component'
-
+import { UploadXlsxComponent } from '../upload-xlsx/upload-xlsx.component';
 import { saveAs } from 'file-saver';
 import { jwtDecode } from 'jwt-decode';
 import { Tokenpayload } from '../model/token';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-dash',
@@ -22,40 +20,79 @@ import { Tokenpayload } from '../model/token';
 })
 
 export class DashComponent implements OnInit {
-  private suscripcion: Subscription;
-  private tmp: any;
+
   public datos: any[] = [];
-  protected nombre:string;
+  protected nombre: string = '';
+  protected saludo: string = '';
+  protected isPc: boolean = true;
 
-
+  public menuAbierto = false;
 
   constructor(
     private dialog: MatDialog,
     private traerDatos: BringDataFromBackService,
     private codTarea: ShareDataService,
     private toastr: ToastrService,
-    private router: Router,
+    protected authService: AuthService
+
   ) {
-    this.suscripcion = this.tmp;
-    this.nombre='';
+
   }
 
   ngOnInit() {
+    if (window.innerWidth <= 500) {
+      this.isPc = false;
+      console.log("isMovil value", this.isPc)
+    }
     this.obtenerDatos();
-    this.nombre=this.mostrarNombreUser();
+    this.nombre = this.mostrarNombreUser();
+  }
+
+  abrirMenu() {
+    this.menuAbierto = true;
+  }
+
+  cerrarMenu() {
+    this.menuAbierto = false;
   }
 
   obtenerDatos(): void {
-    this.suscripcion = this.traerDatos.getTask().subscribe(
+    this.traerDatos.getTask().subscribe(
       {
         next: (Response) => {
+
           this.datos = Response.tareas;
+
+
+          this.getHour();
 
         }, error: (err) => {
           console.error('Error al obtener datos:', err);
         }
       }
     )
+  }
+
+  getHour() {
+    const hora = new Date().getHours();
+
+    console.log("hora", hora);
+    //tamaño de pantalla 500px
+    console.log("Screen size", window.innerWidth);
+
+
+    if (hora >= 19) {
+      this.saludo = "Buenas noches";
+      console.log("saludo:", this.saludo);
+
+    } else if (hora < 12) {
+      this.saludo = "Buenos Días";
+      console.log("saludo:", this.saludo);
+
+    } else {
+      this.saludo = "Buenas Tardes";
+      console.log("saludo:", this.saludo);
+    }
   }
 
   descargarXlsx(): void {
@@ -76,10 +113,8 @@ export class DashComponent implements OnInit {
   }
 
   closeSession() {
-    localStorage.removeItem('tokenJwt');
-    this.router.navigate(['/']);
+    this.authService.cerrarSession();
   }
-
 
 
   //enviar codTarea
@@ -102,8 +137,6 @@ export class DashComponent implements OnInit {
         console.log("afterClose: valor devuelto de close ", result)
         // if(peticion update fue lanzada){
         this.toastr.success('Tarea Editada');
-
-
 
         this.obtenerDatos(); // Recargar datos cuando se cierre el modal
       } else if (result === 0) {
@@ -137,10 +170,8 @@ export class DashComponent implements OnInit {
 
       if (result === 1) {
         console.log("afterClose", result)
-        // if(peticion update fue lanzada){
+
         this.toastr.success('Nueva Tarea Creada');
-
-
 
         this.obtenerDatos(); // Recargar datos cuando se cierre el modal
       } else if (result === 0) {
@@ -191,31 +222,34 @@ export class DashComponent implements OnInit {
       } else if (result === 0) {
         this.toastr.error('Error al cargar el archivo');
       }
-
-
-
     });
 
   }
 
   mostrarNombreUser() {
     const token = localStorage.getItem('tokenJwt');
+
     if (!token) {
       console.log("token no disponible");
-    }
-    try {
-
-      const payload: Tokenpayload = jwtDecode(token as string);
-      return payload.nombre;
-
-    } catch (error) {
-
-      console.error('Token inválido:', error);
+      this.toastr.info('Token no disponible');
       return "";
+    } else {
+      try {
+
+        const payload: Tokenpayload = jwtDecode(token as string);
+        return payload.nombre;
+
+      } catch (error) {
+
+        console.error('Token inválido:', error);
+        return "";
+
+      }
 
     }
-
 
   }
 
 }
+
+

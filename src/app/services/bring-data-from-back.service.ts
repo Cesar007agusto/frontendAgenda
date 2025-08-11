@@ -1,4 +1,3 @@
-import { AuthService } from './headers-token.service';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -17,7 +16,11 @@ export class BringDataFromBackService {
   //API Tareas
   private apiUrlRead = 'http://localhost:3000/tareas/paginate';
   private apiUrlCreate = 'http://localhost:3000/tareas/create';
+  private apiUrlEditTask = 'http://localhost:3000/tareas/update';
   private apiUrlDeleteTask = 'http://localhost:3000/tareas/delete/';
+
+  //notificaciones
+  private apiUrlNotifications ='http://localhost:3000/tareas/notificaciones';
 
   //API Excel
   private apiUrlXlsxDownload = 'http://localhost:3000/excel/getExcel';
@@ -32,54 +35,54 @@ export class BringDataFromBackService {
 
 
   constructor(
-    private http: HttpClient,
-    private authService:AuthService
+    private http: HttpClient
   )
-    { }
+  { }
 
   //Tareas
   //Obtener lista de tareas
   getTask(): Observable<any> {
-    const headers = this.authService.getAuthHeaders();
-    return this.http.get<any>(this.apiUrlRead,{headers});
+    
+    return this.http.get<any>(this.apiUrlRead);
   }
 
   // Método para enviar los datos del formulario
   createTask(objTarea: Tarea): Observable<any> {
-    const headers = this.authService.getAuthHeaders();
-    return this.http.post<any>(this.apiUrlCreate, objTarea,{headers});
+    
+    return this.http.post<any>(this.apiUrlCreate, objTarea);
   
   }
+
+  //edit Task
+  editTask(objTarea:Tarea){
+    
+    return this.http.put<any>(this.apiUrlEditTask,objTarea);
+
+  }
+
+
+
 
   //Delete Task
   deleteTask(codTarea: number) {
     return this.http.delete<any>(this.apiUrlDeleteTask + codTarea);
   }
 
-  //notificaciones
-  async showNotifications() {
-  const token = localStorage.getItem('tokenJwt');
-    try {
-      const notificaciones = await axios.get('http://localhost:3000/tareas/notificaciones',{
-        headers: {
-        Authorization: `Bearer ${token}`,
-      }
-      });
-      console.log("datos ", notificaciones.data);
-      return notificaciones.data;
+  //notifications
+  showNotifications():Observable<any> {
 
-    } catch (error) {
-      console.error('Error al obtener datos:', error);
-      throw error;
-    }
+    return this.http.get<any>(this.apiUrlNotifications);
+    
   }
 
   //Excel
   downloadXlsx() {
+    
     return this.http.get(this.apiUrlXlsxDownload, { responseType: 'blob' });
   }
 
   uploadXlsx(archivo: FormData) {
+    
     return this.http.post(this.apiURLXlsxUpload, archivo);
   }
 

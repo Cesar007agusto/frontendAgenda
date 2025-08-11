@@ -6,7 +6,7 @@ import { BehaviorSubject } from 'rxjs';
 })
 export class ShareDataService {
   private codTarea = new BehaviorSubject<any>({}); // Inicializamos con un valor vacío
-  currentData = this.codTarea.asObservable();  // Observable para escuchar cambios
+  public currentData = this.codTarea.asObservable();  // Observable para escuchar cambios
 
 
 constructor() { }
