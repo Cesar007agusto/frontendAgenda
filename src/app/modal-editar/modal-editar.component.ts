@@ -3,6 +3,7 @@ import { MatDialogRef } from '@angular/material/dialog';
 import { ShareDataService } from '../services/shareData.service';
 import { Tarea } from '../model/tareas';
 import { BringDataFromBackService } from '../services/bring-data-from-back.service';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 
 
 
@@ -12,15 +13,8 @@ import { BringDataFromBackService } from '../services/bring-data-from-back.servi
   styleUrls: ['./modal-editar.component.css']
 })
 export class ModalEditarComponent implements OnInit, OnDestroy {
-  //frontend
-  public nombre: string = "";
-  public fecha: string = "";
-  public estado: string = "";
 
-  //backend
   public camposTabla: Tarea = { codTarea: 0, codUsuario: 0, nombre: '', fecha: '', estado: '' };
-
-  public fechaFormateada: any;
   public respuestaServidor: any = {};
 
 
@@ -30,37 +24,30 @@ export class ModalEditarComponent implements OnInit, OnDestroy {
     private editHttpClient: BringDataFromBackService
   ) { }
 
-  protected getNombreFromInput(event: Event) {
-    const inputElement = event.target as HTMLInputElement;
-    this.nombre = inputElement.value;
 
-  }
+  protected formulario = new FormGroup({
 
-  protected getFechaFromInput(event: Event) {
-    const inputElement = event.target as HTMLInputElement;
-    this.fecha = inputElement.value;
+    nombre: new FormControl(''),
+    fecha: new FormControl(''),
+    estado: new FormControl('')
 
-  }
+  });
 
-  protected getEstadoFromInput(event: Event) {
-    const inputElement = event.target as HTMLInputElement;
-    this.estado = inputElement.value;
-
-  }
 
   //llamado desde boton guardar html
   async sendRequestAndClose() {
-    if (this.nombre !== this.camposTabla.nombre
-      || this.fecha !== this.camposTabla.fecha
-      || this.estado !== this.camposTabla.estado) {
+
+
+    if (this.formulario.get('nombre')?.value !== this.camposTabla.nombre
+      || this.formulario.get('fecha')?.value !== this.convertirFecha(this.camposTabla.fecha)
+      || this.formulario.get('estado')?.value !== this.camposTabla.estado) {
 
       await this.editarTarea();
-    }else{
+    } else {
       this.cerrarModal();
     }
 
   }
-
 
 
   convertirFecha(fecha: string): string {
@@ -73,15 +60,13 @@ export class ModalEditarComponent implements OnInit, OnDestroy {
     this.getCodTarea.currentData.subscribe(data => {
       this.camposTabla = data;
 
-      this.nombre = this.camposTabla.nombre;
-      this.fecha = this.camposTabla.fecha;
-      this.estado = this.camposTabla.estado;
-
-      console.log("getCodTarea: ", this.camposTabla.codTarea);
     });
 
-    this.fechaFormateada = this.convertirFecha(this.camposTabla.fecha);
-    console.log("fecha : ", this.camposTabla.fecha);
+    this.formulario.patchValue({
+        nombre: this.camposTabla.nombre,
+        fecha: this.convertirFecha(this.camposTabla.fecha),
+        estado: this.camposTabla.estado
+      });
 
   }
 
@@ -93,19 +78,19 @@ export class ModalEditarComponent implements OnInit, OnDestroy {
     const objTarea: Tarea = {
       codTarea: this.camposTabla.codTarea,
       codUsuario: 0,
-      nombre: this.nombre,
-      fecha: this.fecha,
-      estado: this.estado
+      nombre: this.formulario.get('nombre')?.value || '',
+      fecha: this.formulario.get('fecha')?.value || '',
+      estado: this.formulario.get('estado')?.value || ''
     }
     this.editHttpClient.editTask(objTarea).subscribe(
       {
         next: (data) => {
           console.log("Respuesta backend ", data.respuesta);
-          this.respuestaServidor =data.respuesta;
+          this.respuestaServidor = data.respuesta;
         },
         error: (err) => {
           console.error("error al editar tarea ", err);
-          this.respuestaServidor =err;
+          this.respuestaServidor = err;
         },
         complete: () => {
           console.log("suscribe completado");

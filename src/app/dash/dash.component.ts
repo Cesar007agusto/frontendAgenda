@@ -119,7 +119,7 @@ export class DashComponent implements OnInit {
 
   //enviar codTarea
   enviarCodTarea(registro: any, event: Event) {
-    console.log("datos registro ", registro.codTarea);
+    
     this.codTarea.updateData(registro);
   }
 
