@@ -29,7 +29,7 @@ export class CreateComponent implements OnInit {
     private dialogRef: MatDialogRef<CreateComponent>
 
   ) {
-    this.datos = { codigo: 0, nombre: '', fecha: '', estado: '' };
+    this.datos = { codTarea: 0,codUsuario:0, nombre: '', fecha: '', estado: '' };
     this.suscription = this.tmp;
 
   }

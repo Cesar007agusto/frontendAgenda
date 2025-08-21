@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { BringDataFromBackService } from 'src/app/services/bring-data-from-back.service';
 import { User } from 'src/app/model/user';
+import { ToastrService } from 'ngx-toastr';
 
 
 @Component({
@@ -16,7 +17,8 @@ export class LoginComponent {
 
   constructor(
     private router: Router,
-    private httpClient: BringDataFromBackService
+    private httpClient: BringDataFromBackService,
+    private toast: ToastrService
   ) {
     this.datosUser = { nombre: "", correo: "", contrasena: "" };
   }
@@ -36,10 +38,15 @@ export class LoginComponent {
         {
           next: (response) => {
 
+            const jwt: string = response.token;
+            
+            localStorage.setItem('tokenJwt', jwt);
+            this.router.navigate(['/dash']);
 
           },
           error: (error) => {
-            console.log("error en la peticion login", error);
+            console.error("error en la peticion login", error);
+            this.toast.error('Credenciales no validas');
           },
           complete: () => {
             console.log("peticion LoginComplete");
@@ -48,8 +55,8 @@ export class LoginComponent {
           }
         }
       );
-
-
+    } else {
+      this.toast.error('Ingrese las credenciales de usuario')
     }
 
   }

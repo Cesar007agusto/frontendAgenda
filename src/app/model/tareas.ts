@@ -1,5 +1,6 @@
 export interface Tarea {
-    codigo:number;
+    codTarea:number;
+    codUsuario:number;
     nombre:string;
     fecha:string;
     estado:string;
