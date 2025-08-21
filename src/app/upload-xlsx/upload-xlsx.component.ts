@@ -24,7 +24,7 @@ export class UploadXlsxComponent {
     const archivo = event.target.files[0];
     if (archivo) {
       this.archivoSelected = archivo;
-      this.formData.append('archivo.xlsx', archivo);
+      this.formData.append('archivo', archivo);
 
     }
 
@@ -51,7 +51,7 @@ export class UploadXlsxComponent {
 
   sendExcelAndClose() {
     this.sendExcel();
-
+    
 
   }
 

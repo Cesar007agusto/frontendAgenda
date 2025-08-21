@@ -9,7 +9,7 @@ import { BringDataFromBackService } from '../services/bring-data-from-back.servi
 export class ModalNotificationsComponent implements OnInit {
 
   protected notificaciones: any[] = [];
-  protected mostrar: boolean = false;
+  protected mostrarNotificacion: boolean = false;
 
 
   constructor(
@@ -17,20 +17,31 @@ export class ModalNotificationsComponent implements OnInit {
   ) { };
 
   async ngOnInit(): Promise<any> {
-    
+
     await this.mostrarNotificaciones();
-    
-    if(this.notificaciones.length > 0){
-      this.mostrar=true;
-    }
+
   }
 
-  async mostrarNotificaciones() {
-    try {
-      this.notificaciones = await this.traerDatos.showNotifications();
-    } catch (error) {
-      console.error('Error al mostrar notificaciones en modal-notifications:', error);
-    }
+  mostrarNotificaciones() {
+    this.traerDatos.showNotifications().subscribe({
+      next: (valor) => {
+        this.notificaciones = valor;
+
+        if (this.notificaciones.length > 0) {
+
+          this.mostrarNotificacion = true;
+        } else {
+          console.log("no hay notificaciones");
+          this.mostrarNotificacion = false;
+        }
+      },
+      error: (err) => {
+        console.error("error en la petición ", err);
+      },
+      complete: () => {
+        console.log("Success");
+      }
+    })
 
   }
 

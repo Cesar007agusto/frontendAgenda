@@ -1,44 +1,42 @@
 <div class="contendedorModal">
-
   <div>
     <h2 class="titulo">EDITAR TAREA</h2>
   </div>
 
-  
-  
-  <mat-dialog-content class="contenedorInput">
+  <mat-dialog-content >
+    <form [formGroup]="formulario" class="contenedorInput">
 
-    <div>
-      <input class="input" type="text" [value]="this.camposTabla.nombre" (input)="getNombreFromInput($event)"/>
-    </div>
+      <div>
+        <input class="input" type="text" formControlName="nombre"/>
+      </div>
 
-    <div>
-      <input class="input" type="date" [value]="this.fechaFormateada" (input)="getFechaFromInput($event)"/>
-    </div>
+      <div>
+        <input class="input" type="date" formControlName="fecha">
+      </div>
 
-    <div>
-      <select class="input" id="opciones" name="opciones" [value]="this.camposTabla.estado" (input)="getEstadoFromInput($event)">
-        <option value="0">Sin Estado</option>
-        <option value="1">Pendiente</option>
-        <option value="2">En Proceso</option>
-        <option value="3">Terminado</option>
-      </select>
-    </div>
+      <div>
+        <select class="input" formControlName="estado">
+          <option value="0">Sin Estado</option>
+          <option value="1">Pendiente</option>
+          <option value="2">En Proceso</option>
+          <option value="3">Terminado</option>
+        </select>
+      </div>
+
+    </form>
   </mat-dialog-content>
 
-
   <mat-dialog-actions class="contenedorBotones">
-
-    <div >
-      <button class="botonGuardar" (click)="sendRequestAndClose();">Guardar</button>
+    <div>
+      <button class="botonGuardar" (click)="sendRequestAndClose()">
+        Guardar
+      </button>
     </div>
 
-    <div >
+    <div>
       <button class="botonCerrar" mat-button (click)="cerrarModal()">
         Cerrar
       </button>
     </div>
-    
   </mat-dialog-actions>
-
 </div>
