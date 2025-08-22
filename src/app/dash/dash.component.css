@@ -10,6 +10,9 @@
   display: flex;
   flex-direction: column;
   height: 100vh;
+
+  width: 100%;
+  max-width: 100%;
   
   
 }
@@ -27,6 +30,8 @@
   color: aliceblue;
   flex: 0;
 
+
+
   
 }
 
@@ -37,8 +42,6 @@
   margin-bottom: 0; /* Elimina cualquier margen inferior */
   font-size: 15px;
   
-  
-
 }
 
 
@@ -46,7 +49,12 @@
 th,td{
   background-color: rgb(9, 60, 170);
   color: aliceblue;
+  text-align: center;
+  border-bottom: 0.5px solid rgb(255, 255, 255);
+  border-collapse: collapse;
 }
+
+
 
 
 .itemFooter{
@@ -56,6 +64,8 @@ th,td{
   color: aliceblue;
   background: linear-gradient(to right, rgb(0, 0, 0), rgb(0, 128, 255));
   flex: 3;
+ 
+  
 }
 
 .contenedorMedia{
