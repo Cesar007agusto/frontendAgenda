@@ -10,7 +10,7 @@
 
       <ul *ngFor="let notif of notificaciones">
         <li >
-          {{ notif.nombre }} - {{ notif.fecha | date : "dd/MM/yyyy" }}
+          {{ notif.nombre }} - {{ notif.fecha | date:'dd/MM/yyyy':'UTC' }}
         </li>
       </ul>
       
