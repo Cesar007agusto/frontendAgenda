@@ -9,11 +9,11 @@
     </div>
 
     <div>
-      <button class="btn boton" (click)="openModalUpload()">Cargar.xlsx</button>
+      <button *ngIf="isAdmin" class="btn boton" (click)="openModalUpload()">Cargar.xlsx</button>
     </div>
 
     <div>
-      <button class="btn boton" (click)="descargarXlsx()">Descargar.xlsx</button>
+      <button  class="btn boton" (click)="descargarXlsx()">Descargar.xlsx</button>
     </div>
 
     <div>
@@ -39,10 +39,10 @@
 
         <div class="close-btn" (click)="cerrarMenu()">✖</div>
         <ul  class="lista">
-          <li><a (click)="mostrarNotificaciones(); openModalNotifications()"><mat-icon class="bell">
+          <li ><a  (click)="mostrarNotificaciones(); openModalNotifications()"><mat-icon class="bell">
           notifications</mat-icon></a> </li>
           <li><button class="btn boton" (click)="openModalCreate()">Nueva Tarea</button></li>
-          <li><button class="btn boton" (click)="openModalUpload()">Cargar.xlsx</button></li>
+          <li><button *ngIf="isAdmin" class="btn boton" (click)="openModalUpload()">Cargar.xlsx</button></li>
           <li><button class="btn boton" (click)="descargarXlsx()">Descargar.xlsx</button></li>
           <li><button class="btn boton" (click)="closeSession()">Cerrar Session</button></li>
         </ul>

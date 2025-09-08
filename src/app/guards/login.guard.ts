@@ -6,11 +6,15 @@ export const loginGuard: CanActivateFn = (route, state) => {
   const token = localStorage.getItem('tokenJwt');
   console.log("guard ejecutandose")
   if (token) {
-    
+
     return true;
-    
+
   } else {
-  router.navigate(['']);   
-  return false; 
+    router.navigate(['']);
+    return false;
   }
+
+
+
+
 };

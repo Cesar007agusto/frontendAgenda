@@ -14,7 +14,7 @@ import { RegisterResponse } from '../model/register';
 export class BringDataFromBackService {
 
 //remoto
- private UrlServer = 'https://backendagenda-azu1.onrender.com';
+  private UrlServer = 'https://backendagenda-azu1.onrender.com';
 //local
   //private UrlServer = 'http://localhost:3000';
   

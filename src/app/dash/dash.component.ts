@@ -27,6 +27,7 @@ export class DashComponent implements OnInit {
   protected isPc: boolean = true;
 
   public menuAbierto = false;
+  public isAdmin: boolean = false;
 
   constructor(
     private dialog: MatDialog,
@@ -39,13 +40,31 @@ export class DashComponent implements OnInit {
 
   }
 
+
+
   ngOnInit() {
+    
+    this.extraertoken();
+
     if (window.innerWidth <= 500) {
       this.isPc = false;
       console.log("isMovil value", this.isPc)
     }
     this.obtenerDatos();
     this.nombre = this.mostrarNombreUser();
+  }
+
+  extraertoken(){
+    const token = localStorage.getItem("tokenJwt");
+  if(token){
+    const payloadBase64 = token.split('.')[1];
+    const payloadDecoded = atob(payloadBase64);
+    const payload = JSON.parse(payloadDecoded);
+    console.log("Roll:", payload.rol);
+    if(payload.rol==='admin'){
+      this.isAdmin=true;
+    }
+  }
   }
 
   abrirMenu() {

@@ -1,13 +1,15 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
-
 import { DashComponent } from './dash/dash.component';
-import { CreateComponent } from './create/create.component';
-
-import { DeleteComponent } from './delete/delete.component';
 import { RegisterComponent } from './login/register/register.component';
 import {loginGuard} from '../app/guards/login.guard';
+import { UploadXlsxComponent } from './upload-xlsx/upload-xlsx.component';
+import { userGuardGuard } from './guards/user-guard.guard';
+
+
+
+
 
 const appRoutes:Routes=[
 
@@ -17,10 +19,10 @@ const appRoutes:Routes=[
       import('./login/login.module').then(m => m.LoginModule)
   },
   {path:'dash',component:DashComponent,canActivate:[loginGuard]},
-  //{path:'add',component:CreateComponent},
-  //{path:'delete/:nombre',component:DeleteComponent},
-  {path:'register',component:RegisterComponent}
 
+  {path:'register',component:RegisterComponent},
+
+  {path:'upload',component:UploadXlsxComponent,canActivate:[userGuardGuard]}
   
   
   ];
