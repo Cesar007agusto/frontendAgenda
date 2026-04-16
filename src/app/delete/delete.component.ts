@@ -12,13 +12,12 @@ import {  ToastrService } from 'ngx-toastr';
 })
 export class DeleteComponent implements OnInit, OnDestroy {
   public nombreTarea: string = "";
-  public codTarea: any = {};
   private suscription: Subscription;
   private tmp: any;
   private respuestaBackend:any={};
 
   constructor(
-    private traerDatos: BringDataFromBackService,
+    private httpClient: BringDataFromBackService,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private dialogRef: MatDialogRef<DeleteComponent>,
     private toastr:ToastrService
@@ -36,7 +35,7 @@ export class DeleteComponent implements OnInit, OnDestroy {
   }
 
   public eliminarTarea(): void {
-    this.suscription = this.traerDatos.deleteTask(this.data.codTarea).subscribe(
+    this.suscription = this.httpClient.deleteTask(this.data.codTarea).subscribe(
       {
         next: (response) => {
           console.log("Tarea eliminada con éxito desde el front", response);

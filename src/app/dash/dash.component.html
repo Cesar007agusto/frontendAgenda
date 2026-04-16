@@ -67,11 +67,11 @@
         <td>{{ registro.fecha }}</td>
         <td>
           {{
-            registro?.estado == 1
+            registro?.estado == "1"
               ? "PENDIENTE"
-              : registro?.estado == 2
+              : registro?.estado == "2"
               ? "EN PROCESO"
-              : registro?.estado == 3
+              : registro?.estado == "3"
               ? "TERMINADO"
               : "SIN ESTADO"
           }}

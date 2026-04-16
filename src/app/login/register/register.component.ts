@@ -12,14 +12,14 @@ import { Router } from '@angular/router';
 })
 export class RegisterComponent {
 
-  protected datosUser:User;
+  protected usuario:User={nombre:'',correo:'',contrasena:''};
 
   constructor(
     private httpClient: BringDataFromBackService,
     private toast: ToastrService,
     private router: Router
   ) {
-    this.datosUser={nombre:"",correo:"",contrasena:""};
+    
   }
 
   protected formulario = new FormGroup({
@@ -34,11 +34,11 @@ export class RegisterComponent {
 
     if (this.formulario.valid) {
       if (this.formulario.get('contrasena')?.value === this.formulario.get('confirmarContrasena')?.value) {
-        this.datosUser.nombre = this.formulario.get('nombre')!.value as string;
-        this.datosUser.correo = this.formulario.get('correo')!.value as string;
-        this.datosUser.contrasena = this.formulario.get('contrasena')!.value as string;
+        this.usuario.nombre = this.formulario.get('nombre')!.value as string;
+        this.usuario.correo = this.formulario.get('correo')!.value as string;
+        this.usuario.contrasena = this.formulario.get('contrasena')!.value as string;
 
-        this.httpClient.registerUser(this.datosUser).subscribe(
+        this.httpClient.registerUser(this.usuario).subscribe(
           {
             next: (response) => {
 

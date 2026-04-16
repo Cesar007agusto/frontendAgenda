@@ -1,17 +1,21 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { ToastrService } from 'ngx-toastr';
+import { saveAs } from 'file-saver';
+
+
 import { ModalEditarComponent } from '../modal-editar/modal-editar.component';
 import { ModalNotificationsComponent } from '../modal-notifications/modal-notifications.component';
-import { BringDataFromBackService } from '../services/bring-data-from-back.service';
-import { ShareDataService } from '../services/shareData.service';
-import { ToastrService } from 'ngx-toastr';
 import { CreateComponent } from '../create/create.component';
 import { DeleteComponent } from '../delete/delete.component';
 import { UploadXlsxComponent } from '../upload-xlsx/upload-xlsx.component';
-import { saveAs } from 'file-saver';
-import { jwtDecode } from 'jwt-decode';
-import { Tokenpayload } from '../model/token';
+
+import { BringDataFromBackService } from '../services/bring-data-from-back.service';
+import { ShareDataService } from '../services/shareData.service';
 import { AuthService } from '../services/auth.service';
+import { Tarea } from '../model/tareas';
+import { IsAdminService } from '../services/is-admin.service';
+import { GetHourService } from '../services/get-hour.service';
 
 @Component({
   selector: 'app-dash',
@@ -21,51 +25,38 @@ import { AuthService } from '../services/auth.service';
 
 export class DashComponent implements OnInit {
 
-  public datos: any[] = [];
+  public datos: Tarea[] = [];
   protected nombre: string = '';
   protected saludo: string = '';
   protected isPc: boolean = true;
-
   public menuAbierto = false;
   public isAdmin: boolean = false;
 
   constructor(
     private dialog: MatDialog,
-    private traerDatos: BringDataFromBackService,
+    private httpClient: BringDataFromBackService,
     private codTarea: ShareDataService,
     private toastr: ToastrService,
-    protected authService: AuthService
+    protected authService: AuthService,
+    protected validarRol:IsAdminService,
+    protected obtenerHora:GetHourService
 
-  ) {
-
-  }
-
+  ) {}
 
 
   ngOnInit() {
     
-    this.extraertoken();
+    this.isAdmin=this.validarRol.esAdmin();
 
     if (window.innerWidth <= 500) {
       this.isPc = false;
       console.log("isMovil value", this.isPc)
     }
     this.obtenerDatos();
-    this.nombre = this.mostrarNombreUser();
+    this.nombre = this.authService.mostrarNombreUser();
   }
 
-  extraertoken(){
-    const token = localStorage.getItem("tokenJwt");
-  if(token){
-    const payloadBase64 = token.split('.')[1];
-    const payloadDecoded = atob(payloadBase64);
-    const payload = JSON.parse(payloadDecoded);
-    console.log("Roll:", payload.rol);
-    if(payload.rol==='admin'){
-      this.isAdmin=true;
-    }
-  }
-  }
+  
 
   abrirMenu() {
     this.menuAbierto = true;
@@ -76,14 +67,13 @@ export class DashComponent implements OnInit {
   }
 
   obtenerDatos(): void {
-    this.traerDatos.getTask().subscribe(
+    this.httpClient.getTask().subscribe(
       {
         next: (Response) => {
 
           this.datos = Response.tareas;
-
-
-          this.getHour();
+          console.log("array datos",this.datos);
+          this.saludo=this.obtenerHora.getHour();
 
         }, error: (err) => {
           console.error('Error al obtener datos:', err);
@@ -92,30 +82,10 @@ export class DashComponent implements OnInit {
     )
   }
 
-  getHour() {
-    const hora = new Date().getHours();
-
-    console.log("hora", hora);
-    //tamaño de pantalla 500px
-    console.log("Screen size", window.innerWidth);
-
-
-    if (hora >= 19) {
-      this.saludo = "Buenas noches";
-      console.log("saludo:", this.saludo);
-
-    } else if (hora < 12) {
-      this.saludo = "Buenos Días";
-      console.log("saludo:", this.saludo);
-
-    } else {
-      this.saludo = "Buenas Tardes";
-      console.log("saludo:", this.saludo);
-    }
-  }
+  
 
   descargarXlsx(): void {
-    this.traerDatos.downloadXlsx().subscribe(
+    this.httpClient.downloadXlsx().subscribe(
       {
 
         next: (blob) => {
@@ -142,6 +112,7 @@ export class DashComponent implements OnInit {
     this.codTarea.updateData(registro);
   }
 
+
   abrirModalEditar() {
 
     const dialogRef = this.dialog.open(ModalEditarComponent, {
@@ -167,8 +138,9 @@ export class DashComponent implements OnInit {
   }
 
   mostrarNotificaciones() {
-    this.traerDatos.showNotifications();
+    this.httpClient.showNotifications();
   }
+
 
   openModalNotifications() {
     const dialogRef = this.dialog.open(ModalNotificationsComponent, {
@@ -176,6 +148,7 @@ export class DashComponent implements OnInit {
     });
   }
 
+  
   openModalCreate() {
     const dialogo = this.dialog.open(CreateComponent, {
       width: '350px'
@@ -245,29 +218,7 @@ export class DashComponent implements OnInit {
 
   }
 
-  mostrarNombreUser() {
-    const token = localStorage.getItem('tokenJwt');
-
-    if (!token) {
-      console.log("token no disponible");
-      this.toastr.info('Token no disponible');
-      return "";
-    } else {
-      try {
-
-        const payload: Tokenpayload = jwtDecode(token as string);
-        return payload.nombre;
-
-      } catch (error) {
-
-        console.error('Token inválido:', error);
-        return "";
-
-      }
-
-    }
-
-  }
+  
 
 }
 

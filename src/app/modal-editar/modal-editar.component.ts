@@ -21,7 +21,7 @@ export class ModalEditarComponent implements OnInit, OnDestroy {
   constructor(
     private dialogRef: MatDialogRef<ModalEditarComponent>,
     private getCodTarea: ShareDataService,
-    private editHttpClient: BringDataFromBackService
+    private httpClient: BringDataFromBackService
   ) { }
 
 
@@ -82,7 +82,7 @@ export class ModalEditarComponent implements OnInit, OnDestroy {
       fecha: this.formulario.get('fecha')?.value || '',
       estado: this.formulario.get('estado')?.value || ''
     }
-    this.editHttpClient.editTask(objTarea).subscribe(
+    this.httpClient.editTask(objTarea).subscribe(
       {
         next: (data) => {
           console.log("Respuesta backend ", data.respuesta);

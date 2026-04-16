@@ -13,7 +13,7 @@ export class ModalNotificationsComponent implements OnInit {
 
 
   constructor(
-    private traerDatos: BringDataFromBackService
+    private httpclient: BringDataFromBackService
   ) { };
 
   async ngOnInit(): Promise<any> {
@@ -23,7 +23,7 @@ export class ModalNotificationsComponent implements OnInit {
   }
 
   mostrarNotificaciones() {
-    this.traerDatos.showNotifications().subscribe({
+    this.httpclient.showNotifications().subscribe({
       next: (valor) => {
         this.notificaciones = valor;
 
